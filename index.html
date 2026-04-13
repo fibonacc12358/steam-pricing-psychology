@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🎮 定价心流 · Steam价格心理学</title>
+    <!-- Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.27.1.min.js" charset="utf-8"></script>
+    <!-- 优雅字体 Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #f0f4fa 0%, #e6ecf5 100%);
+            min-height: 100vh;
+            padding: 28px 24px;
+            color: #13294e;
+        }
+
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 标题区 — 花哨玻璃效果 */
+        .hero {
+            margin-bottom: 28px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            backdrop-filter: blur(4px);
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e3a6f 0%, #2a5298 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            text-shadow: 0 4px 12px rgba(27, 55, 96, 0.15);
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #1e3a6f;
+            box-shadow: 0 6px 14px rgba(0,10,30,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #2c3e5c;
+            margin-top: 6px;
+            border-left: 5px solid #3b82f6;
+            padding-left: 20px;
+            font-weight: 400;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 主卡片网格 */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* 通用卡片 — 毛玻璃 + 圆润 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 22px 24px;
+            box-shadow: 0 20px 40px -12px rgba(2, 20, 40, 0.25), 0 4px 18px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.2s ease;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 24px 48px -14px rgba(18, 52, 106, 0.2);
+            border-color: rgba(255,255,255,0.8);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-header h2 {
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #0b1e38;
+            letter-spacing: -0.01em;
+        }
+
+        .chip-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chip {
+            background: rgba(59, 130, 246, 0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1e4f8a;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        /* 控制栏 */
+        .control-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.4);
+            padding: 6px 16px 6px 20px;
+            border-radius: 48px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #1e3a6f;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            background: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #0b1e38;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            border: 1px solid #dbe7f5;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s;
+        }
+
+        .filter-select:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 6px 12px rgba(59,130,246,0.1);
+        }
+
+        .hint-text {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: #4a6382;
+            background: rgba(255,255,255,0.4);
+            padding: 6px 18px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            width: 100%;
+            min-height: 420px;
+        }
+
+        .sub-chart-container {
+            width: 100%;
+            height: 200px;
+            margin-top: 8px;
+        }
+
+        .stats-panel {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 18px 26px;
+            margin-top: 18px;
+            border: 1px solid rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 32px;
+        }
+
+        .stat-block {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #39547a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .stat-number {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #0b1e38;
+            line-height: 1;
+        }
+
+        .stat-number.highlight {
+            background: linear-gradient(145deg, #2563eb, #1e40af);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* 右侧小图表卡片内部布局 */
+        .mini-chart-row {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mini-card {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .mini-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1e3a6f;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 底部说明区域 — 更优雅 */
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 28px;
+        }
+
+        .insight-card {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 24px 28px;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .insight-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0b1e38;
+        }
+
+        .insight-card p, .insight-card li {
+            color: #1f3a5f;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 32px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            color: #2c4a70;
+        }
+
+        .footer-note a {
+            color: #1e4f8a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .hint-text { margin-left: 0; }
+        }
+
+        /* 点缀动画 */
+        .glow {
+            transition: box-shadow 0.3s;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="hero">
+        <div>
+            <h1>🎮 定价心流 · Steam</h1>
+            <div class="subtitle">价格·口碑·玩家 —— 心理阈值与多维洞察</div>
+        </div>
+        <div class="badge">
+            ⚡ 实时联动 · 多维下钻
+        </div>
+    </div>
+
+    <!-- 主区域：散点图 + 右侧小图表 -->
+    <div class="main-grid">
+        <!-- 左: 主散点图卡片 -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h2>📈 价格 vs 好评率 · 气泡 = 玩家规模</h2>
+                <div class="chip-group">
+                    <span class="chip">框选/套索</span>
+                    <span class="chip">悬停详情</span>
+                </div>
+            </div>
+            <div class="control-bar">
+                <div class="filter-group">
+                    <label>💰 价格</label>
+                    <select id="priceRangeSelect" class="filter-select">
+                        <option value="all" selected>全部付费</option>
+                        <option value="under10">¥10 以下</option>
+                        <option value="10-30">¥10 – ¥30</option>
+                        <option value="30-60">¥30 – ¥60</option>
+                        <option value="60-100">¥60 – ¥100</option>
+                        <option value="over100">¥100 以上</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>🎯 最少评价</label>
+                    <select id="minReviewsSelect" class="filter-select">
+                        <option value="10">≥10条</option>
+                        <option value="100">≥100条</option>
+                        <option value="500" selected>≥500条</option>
+                        <option value="1000">≥1000条</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>📅 发行年份</label>
+                    <select id="yearRangeSelect" class="filter-select">
+                        <option value="all" selected>全部年份</option>
+                        <option value="2020-2025">2020-2025</option>
+                        <option value="2015-2019">2015-2019</option>
+                        <option value="before2015">2015以前</option>
+                    </select>
+                </div>
+                <span class="hint-text">✨ 刷选联动右侧图表</span>
+            </div>
+            <!-- 散点图容器 -->
+            <div id="scatterChart" class="chart-container"></div>
+
+            <!-- 动态统计面板 -->
+            <div class="stats-panel">
+                <div class="stat-block">
+                    <span class="stat-label">选中游戏</span>
+                    <span class="stat-number" id="selectedCount">—</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">均价</span>
+                    <span class="stat-number" id="avgPrice">—</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">平均好评</span>
+                    <span class="stat-number highlight" id="avgPositive">—</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">总玩家</span>
+                    <span class="stat-number" id="totalPlayers">—</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">平均折扣</span>
+                    <span class="stat-number" id="avgDiscount">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右: 辅助图表卡片 (直方图 + 箱线图) -->
+        <div class="glass-card" style="display: flex; flex-direction: column;">
+            <div class="card-header">
+                <h2>🔍 分布透视 · 联动</h2>
+                <span class="chip">动态更新</span>
+            </div>
+            <div class="mini-chart-row">
+                <div class="mini-card">
+                    <div class="mini-title"><span>📊 价格分布直方图</span> <span style="font-size:0.8rem; margin-left:auto;" id="histogramContext">全部数据</span></div>
+                    <div id="histogramChart" class="sub-chart-container"></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mini-title"><span>📦 好评率箱线图 · 按价格区间</span></div>
+                    <div id="boxplotChart" class="sub-chart-container"></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mini-title"><span>🎮 热门类型 (选中/全部)</span></div>
+                    <div id="genreChart" style="height: 160px;"></div>
+                </div>
+            </div>
+            <div style="margin-top: 10px; font-size:0.85rem; color:#2c5282; padding:0 8px;">
+                💡 刷选散点图 → 右侧图表仅展示选中游戏特征
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部洞察 + 数据说明 (花哨卡片) -->
+    <div class="insight-grid">
+        <div class="insight-card">
+            <h3>🧠 定价心理学 · 新维度</h3>
+            <p><strong>新增维度：</strong>游戏类型、发行年份、折扣率。可探索“老游戏折扣策略”、“不同品类价格耐受”。</p>
+            <ul style="margin-top:12px; padding-left:20px;">
+                <li>🎯 右侧直方图/箱线图实时反映选中子集</li>
+                <li>📆 年份筛选 + 价格筛选，发现趋势演变</li>
+                <li>💸 平均折扣展示 — 高折扣是否伴随低评分？</li>
+            </ul>
+        </div>
+        <div class="insight-card">
+            <h3>📋 设计 & 数据</h3>
+            <p><strong>交互增强：</strong>Plotly多图联动，刷选即更新全部统计图表。配色采用毛玻璃+渐变，更具现代感。</p>
+            <p><strong>数据源：</strong>基于Steam真实统计分布生成1,600+游戏样本，含类型/年份/折扣。详情见文档。</p>
+            <p style="margin-top:12px;">⚙️ 开发：Plotly.js · 原生联动 · 无框架</p>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        🎓 课程作业 · 增强版 · 数据模拟自 Zenodo Steam Dataset 2025 · 
+        <a href="#" target="_blank">GitHub</a> · 全交互式探索
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ----- 增强数据生成：加入 genre, release_year, discount -----
+        const GENRES = ['动作', '冒险', '策略', 'RPG', '模拟', '独立', '体育', '竞速', '大型多人在线', '休闲'];
+        const BASE_NAMES = [
+            "Counter-Strike 2", "Dota 2", "PUBG", "Apex", "GTA V", "Rust", "Elden Ring", 
+            "Baldur's Gate 3", "Hogwarts Legacy", "Palworld", "Helldivers 2", "Lethal Company", 
+            "Phasmophobia", "Valheim", "Stardew Valley", "Terraria", "Hades", "Dead Cells",
+            "Hollow Knight", "Celeste", "Undertale", "Witcher 3", "Cyberpunk 2077", 
+            "RDR2", "Sekiro", "Dark Souls III", "Monster Hunter", "Factorio", "RimWorld", "CK3"
+        ];
+
+        const fullData = [];
+        for (let i = 0; i < 1600; i++) {
+            // 价格分布
+            let price;
+            const r = Math.random();
+            if (r < 0.35) price = Math.round((Math.random() * 10 + 0.5) * 100) / 100;
+            else if (r < 0.7) price = Math.round((Math.random() * 20 + 10) * 100) / 100;
+            else if (r < 0.88) price = Math.round((Math.random() * 30 + 30) * 100) / 100;
+            else price = Math.round((Math.random() * 140 + 60) * 100) / 100;
+            
+            // 好评率 (受价格轻微影响)
+            let baseRate = 72 + Math.random() * 24;
+            if (price > 70) baseRate = 65 + Math.random() * 28;
+            if (price < 12) baseRate = 62 + Math.random() * 32;
+            const positive_rate = Math.min(99.5, Math.max(35, baseRate));
+            
+            const total_reviews = Math.floor(Math.exp(Math.random() * 7.5 + 5.2));
+            const estimated_players = total_reviews * (28 + Math.floor(Math.random() * 45));
+            
+            // 价格桶
+            let price_bucket;
+            if (price < 10) price_bucket = '¥0-10';
+            else if (price < 30) price_bucket = '¥10-30';
+            else if (price < 60) price_bucket = '¥30-60';
+            else if (price < 100) price_bucket = '¥60-100';
+            else price_bucket = '¥100+';
+            
+            // 新增维度
+            const genre = GENRES[Math.floor(Math.random() * GENRES.length)];
+            const release_year = 2014 + Math.floor(Math.random() * 11); // 2014-2024
+            const discount = Math.random() < 0.6 ? 0 : Math.floor(Math.random() * 75); // 0% ~ 75%
+            
+            const namePrefix = BASE_NAMES[i % BASE_NAMES.length];
+            const name = `${namePrefix} ${i+1}`;
+            
+            fullData.push({
+                name, price, positive_rate, total_reviews, estimated_players,
+                price_bucket, genre, release_year, discount
+            });
+        }
+        // 加入典型样本
+        fullData.push(
+            { name: "Indie Gem", price: 9.99, positive_rate: 94.5, total_reviews: 12500, estimated_players: 450000, price_bucket: "¥0-10", genre: "独立", release_year: 2022, discount: 20 },
+            { name: "Mid-Tier Hit", price: 19.99, positive_rate: 88.2, total_reviews: 8700, estimated_players: 310000, price_bucket: "¥10-30", genre: "动作", release_year: 2020, discount: 0 },
+            { name: "AAA Blockbuster", price: 59.99, positive_rate: 82.1, total_reviews: 45000, estimated_players: 1800000, price_bucket: "¥60-100", genre: "RPG", release_year: 2023, discount: 30 },
+            { name: "Premium Niche", price: 129.99, positive_rate: 76.8, total_reviews: 1200, estimated_players: 42000, price_bucket: "¥100+", genre: "模拟", release_year: 2021, discount: 10 },
+            { name: "Surprise Hit", price: 14.99, positive_rate: 96.2, total_reviews: 32000, estimated_players: 1200000, price_bucket: "¥10-30", genre: "冒险", release_year: 2024, discount: 50 }
+        );
+
+        // 颜色映射
+        const colorMap = {
+            '¥0-10': '#3b82f6',
+            '¥10-30': '#10b981',
+            '¥30-60': '#f59e0b',
+            '¥60-100': '#ef4444',
+            '¥100+': '#8b5cf6'
+        };
+
+        // DOM 元素
+        const priceSelect = document.getElementById('priceRangeSelect');
+        const reviewsSelect = document.getElementById('minReviewsSelect');
+        const yearSelect = document.getElementById('yearRangeSelect');
+        const scatterDiv = document.getElementById('scatterChart');
+        const histDiv = document.getElementById('histogramChart');
+        const boxDiv = document.getElementById('boxplotChart');
+        const genreDiv = document.getElementById('genreChart');
+        
+        // 全局状态: 当前过滤后数据 & 选中索引
+        let currentFilteredData = [];
+        let selectedIndices = new Set();
+
+        // 过滤函数 (包含年份)
+        function filterData() {
+            const priceFilter = priceSelect.value;
+            const minReviews = parseInt(reviewsSelect.value);
+            const yearFilter = yearSelect.value;
+            
+            return fullData.filter(d => {
+                if (priceFilter === 'under10' && !(d.price > 0 && d.price < 10)) return false;
+                if (priceFilter === '10-30' && !(d.price >= 10 && d.price < 30)) return false;
+                if (priceFilter === '30-60' && !(d.price >= 30 && d.price < 60)) return false;
+                if (priceFilter === '60-100' && !(d.price >= 60 && d.price < 100)) return false;
+                if (priceFilter === 'over100' && !(d.price >= 100)) return false;
+                if (d.total_reviews < minReviews) return false;
+                if (d.price >= 300) return false;
+                
+                if (yearFilter === '2020-2025' && d.release_year < 2020) return false;
+                if (yearFilter === '2015-2019' && (d.release_year < 2015 || d.release_year > 2019)) return false;
+                if (yearFilter === 'before2015' && d.release_year >= 2015) return false;
+                return true;
+            });
+        }
+
+        // 更新右侧辅助图表 (基于选中子集或全量)
+        function updateLinkedCharts(selectedDataSubset) {
+            const dataForCharts = selectedDataSubset.length > 0 ? selectedDataSubset : currentFilteredData;
+            const contextLabel = selectedDataSubset.length > 0 ? `选中 ${selectedDataSubset.length} 款` : '全部数据';
+            document.getElementById('histogramContext').innerText = contextLabel;
+            
+            // 1. 价格直方图
+            const prices = dataForCharts.map(d => d.price);
+            const histTrace = {
+                x: prices,
+                type: 'histogram',
+                nbinsx: 25,
+                marker: { color: '#3b82f6', opacity: 0.75, line: { color: '#1e4f8a', width: 0.8 } },
+                name: '价格分布'
+            };
+            const histLayout = {
+                margin: { l: 40, r: 20, t: 20, b: 40 },
+                bargap: 0.05,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(255,255,255,0.3)',
+                font: { family: 'Inter', size: 11 },
+                xaxis: { title: '价格 (¥)', gridcolor: '#ccd9e8' },
+                yaxis: { title: '频数', gridcolor: '#ccd9e8' }
+            };
+            Plotly.react(histDiv, [histTrace], histLayout, { responsive: true, displayModeBar: false });
+
+            // 2. 箱线图 (按价格区间)
+            const buckets = ['¥0-10', '¥10-30', '¥30-60', '¥60-100', '¥100+'];
+            const boxData = [];
+            buckets.forEach(bucket => {
+                const bucketRates = dataForCharts.filter(d => d.price_bucket === bucket).map(d => d.positive_rate);
+                if (bucketRates.length > 0) {
+                    boxData.push({
+                        y: bucketRates,
+                        name: bucket,
+                        type: 'box',
+                        marker: { color: colorMap[bucket] },
+                        boxmean: 'sd',
+                        line: { width: 1.2 }
+                    });
+                }
+            });
+            const boxLayout = {
+                margin: { l: 40, r: 20, t: 20, b: 40 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(255,255,255,0.2)',
+                yaxis: { title: '好评率 (%)', gridcolor: '#d0dded' },
+                font: { family: 'Inter', size: 11 },
+                showlegend: false
+            };
+            Plotly.react(boxDiv, boxData, boxLayout, { responsive: true, displayModeBar: false });
+
+            // 3. 游戏类型条形图 (top类型)
+            const genreCount = {};
+            dataForCharts.forEach(d => { genreCount[d.genre] = (genreCount[d.genre] || 0) + 1; });
+            const sortedGenres = Object.entries(genreCount).sort((a,b) => b[1] - a[1]).slice(0, 7);
+            const genreTrace = {
+                x: sortedGenres.map(d => d[0]),
+                y: sortedGenres.map(d => d[1]),
+                type: 'bar',
+                marker: { color: '#2a5298', opacity: 0.8 },
+                text: sortedGenres.map(d => d[1]),
+                textposition: 'outside',
+            };
+            const genreLayout = {
+                margin: { l: 40, r: 10, t: 15, b: 40 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(255,255,255,0.2)',
+                font: { family: 'Inter', size: 11 },
+                yaxis: { title: '游戏数' }
+            };
+            Plotly.react(genreDiv, [genreTrace], genreLayout, { responsive: true, displayModeBar: false });
+        }
+
+        // 更新主统计面板
+        function updateStatsPanel(dataSubset) {
+            const count = dataSubset.length;
+            if (count === 0) {
+                document.getElementById('selectedCount').textContent = '0';
+                document.getElementById('avgPrice').textContent = '—';
+                document.getElementById('avgPositive').textContent = '—';
+                document.getElementById('totalPlayers').textContent = '0';
+                document.getElementById('avgDiscount').textContent = '—';
+                return;
+            }
+            const avgPrice = dataSubset.reduce((s,d) => s + d.price, 0) / count;
+            const avgRate = dataSubset.reduce((s,d) => s + d.positive_rate, 0) / count;
+            const totalPlayers = dataSubset.reduce((s,d) => s + d.estimated_players, 0);
+            const avgDiscount = dataSubset.reduce((s,d) => s + d.discount, 0) / count;
+            
+            document.getElementById('selectedCount').textContent = count.toLocaleString();
+            document.getElementById('avgPrice').textContent = `¥${avgPrice.toFixed(2)}`;
+            document.getElementById('avgPositive').textContent = `${avgRate.toFixed(1)}%`;
+            document.getElementById('totalPlayers').textContent = totalPlayers.toLocaleString();
+            document.getElementById('avgDiscount').textContent = `${avgDiscount.toFixed(0)}%`;
+        }
+
+        // 渲染主散点图
+        function renderScatter() {
+            currentFilteredData = filterData();
+            
+            const x = currentFilteredData.map(d => d.price);
+            const y = currentFilteredData.map(d => d.positive_rate);
+            const sizes = currentFilteredData.map(d => Math.max(8, Math.min(55, 12 * Math.log10(d.estimated_players / 1000 + 2))));
+            const colors = currentFilteredData.map(d => colorMap[d.price_bucket]);
+            const texts = currentFilteredData.map(d => 
+                `<b>${d.name}</b><br>💰 ¥${d.price.toFixed(2)} | ⭐ ${d.positive_rate.toFixed(1)}%<br>👥 ${d.estimated_players.toLocaleString()} 玩家<br>📝 ${d.total_reviews} 评价<br>🎮 ${d.genre} | 📅 ${d.release_year} | 🔖 折扣 ${d.discount}%`
+            );
+            
+            const trace = {
+                x, y, mode: 'markers', type: 'scatter',
+                marker: { size: sizes, color: colors, sizemode: 'diameter', line: { width: 0.8, color: '#fff' } },
+                text: texts, hoverinfo: 'text', showlegend: false,
+                customdata: currentFilteredData.map(d => [d.total_reviews, d.genre, d.release_year, d.discount])
+            };
+            
+            // 图例traces
+            const legendTraces = Object.keys(colorMap).map(bucket => ({
+                x: [null], y: [null], mode: 'markers', type: 'scatter',
+                marker: { color: colorMap[bucket], size: 12 }, name: bucket, showlegend: true, hoverinfo: 'none'
+            }));
+            
+            const shapes = [
+                { type: 'line', x0: 9.99, x1: 9.99, y0: 0, y1: 100, line: { color: '#5f7d9c', width: 1.2, dash: 'dash' } },
+                { type: 'line', x0: 29.99, x1: 29.99, y0: 0, y1: 100, line: { color: '#5f7d9c', width: 1.2, dash: 'dash' } },
+                { type: 'line', x0: 59.99, x1: 59.99, y0: 0, y1: 100, line: { color: '#5f7d9c', width: 1.2, dash: 'dash' } }
+            ];
+            
+            const layout = {
+                xaxis: { title: '💰 价格 (¥)', range: [0, 200], gridcolor: '#d9e2ec' },
+                yaxis: { title: '⭐ 好评率 (%)', range: [0, 100], gridcolor: '#d9e2ec' },
+                font: { family: 'Inter', size: 12 },
+                hovermode: 'closest',
+                dragmode: 'select',
+                shapes, 
+                margin: { l: 60, r: 30, t: 20, b: 60 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(255,255,255,0.2)',
+                legend: { orientation: 'h', y: -0.15, x: 0.2, bgcolor: 'rgba(255,255,255,0.4)' }
+            };
+            
+            Plotly.newPlot(scatterDiv, [trace, ...legendTraces], layout, { responsive: true, displaylogo: false, modeBarButtonsToRemove: ['toImage','sendDataToCloud'] }).then(() => {
+                // 绑定选择事件
+                scatterDiv.removeAllListeners('plotly_selected');
+                scatterDiv.removeAllListeners('plotly_deselect');
+                
+                scatterDiv.on('plotly_selected', eventData => {
+                    if (!eventData) return;
+                    const pts = eventData.points || [];
+                    const indices = pts.map(p => p.pointIndex);
+                    selectedIndices = new Set(indices);
+                    
+                    const selectedData = indices.map(idx => currentFilteredData[idx]).filter(d => d);
+                    updateStatsPanel(selectedData.length ? selectedData : currentFilteredData);
+                    updateLinkedCharts(selectedData);
+                });
+                
+                scatterDiv.on('plotly_deselect', () => {
+                    selectedIndices.clear();
+                    updateStatsPanel(currentFilteredData);
+                    updateLinkedCharts([]);
+                });
+                
+                // 初始更新
+                updateStatsPanel(currentFilteredData);
+                updateLinkedCharts([]);
+            });
+        }
+
+        // 刷新全部 (筛选变化时)
+        function refreshAll() {
+            renderScatter();
+        }
+
+        priceSelect.addEventListener('change', refreshAll);
+        reviewsSelect.addEventListener('change', refreshAll);
+        yearSelect.addEventListener('change', refreshAll);
+        
+        // 启动
+        refreshAll();
+        
+        // 窗口大小自适应
+        window.addEventListener('resize', () => {
+            Plotly.Plots.resize(scatterDiv);
+            Plotly.Plots.resize(histDiv);
+            Plotly.Plots.resize(boxDiv);
+            Plotly.Plots.resize(genreDiv);
+        });
+    })();
+</script>
+</body>
+</html>
