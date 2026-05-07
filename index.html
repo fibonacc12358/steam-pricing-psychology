@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🎮 定价心流 · 科技感增强 | Steam价格心理学</title>
+    <title>🎮 Steam价格心理学</title>
     <script src="https://cdn.plot.ly/plotly-2.27.1.min.js" charset="utf-8"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: radial-gradient(circle at 20% 30%, #1e293b 0%, #0f172a 90%);
@@ -18,334 +17,147 @@
             padding: 28px 24px;
             color: #e2e8f0;
         }
-
-        .dashboard {
-            max-width: 1700px;
-            margin: 0 auto;
-        }
-
-        /* 标题区 */
+        .dashboard { max-width: 1700px; margin: 0 auto; }
         .hero {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
+            display: flex; align-items: baseline; justify-content: space-between;
+            flex-wrap: wrap; margin-bottom: 24px;
         }
-
         h1 {
-            font-size: 2.6rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em;
             background: linear-gradient(135deg, #a5f3fc 0%, #67e8f9 40%, #818cf8 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
             filter: drop-shadow(0 4px 10px rgba(34,211,238,0.3));
         }
-
         .subtitle {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            margin-top: 4px;
-            border-left: 5px solid #22d3ee;
-            padding-left: 20px;
-            font-weight: 400;
+            font-size: 1.1rem; color: #94a3b8; margin-top: 4px;
+            border-left: 5px solid #22d3ee; padding-left: 20px; font-weight: 400;
         }
-
         .badge {
-            background: rgba(34, 211, 238, 0.1);
-            backdrop-filter: blur(12px);
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            color: #67e8f9;
-            border: 1px solid rgba(34,211,238,0.3);
+            background: rgba(34, 211, 238, 0.1); backdrop-filter: blur(12px);
+            padding: 8px 24px; border-radius: 40px; font-weight: 600;
+            color: #67e8f9; border: 1px solid rgba(34,211,238,0.3);
             box-shadow: 0 0 20px rgba(34,211,238,0.15);
         }
-
-        /* 主网格布局 */
         .main-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.9fr;
-            gap: 22px;
-            margin-bottom: 24px;
+            display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 22px; margin-bottom: 24px;
         }
-
         .bottom-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.9fr;
-            gap: 22px;
-            margin-bottom: 28px;
+            display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 22px; margin-bottom: 28px;
         }
-
-        /* 科技感卡片 */
         .tech-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 22px 24px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border-radius: 28px;
+            padding: 22px 24px; border: 1px solid rgba(56, 189, 248, 0.2);
             box-shadow: 0 20px 36px -12px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(34,211,238,0.15);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-
         .tech-card:hover {
             border-color: rgba(34,211,238,0.5);
             box-shadow: 0 0 30px rgba(34,211,238,0.15), 0 20px 36px -12px black;
         }
-
         .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 18px;
         }
-
         .card-header h2 {
-            font-weight: 600;
-            font-size: 1.25rem;
-            color: #f1f5f9;
+            font-weight: 600; font-size: 1.25rem; color: #f1f5f9;
             letter-spacing: -0.01em;
         }
-
-        .chip-group {
-            display: flex;
-            gap: 8px;
-        }
-
+        .chip-group { display: flex; gap: 8px; }
         .chip {
-            background: rgba(99, 102, 241, 0.2);
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #a5b4fc;
-            border: 1px solid rgba(129,140,248,0.3);
+            background: rgba(99, 102, 241, 0.2); padding: 4px 14px;
+            border-radius: 40px; font-size: 0.8rem; font-weight: 500;
+            color: #a5b4fc; border: 1px solid rgba(129,140,248,0.3);
         }
-
-        /* 控制栏 */
         .control-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px 22px;
-            margin-bottom: 18px;
-            align-items: center;
+            display: flex; flex-wrap: wrap; gap: 14px 22px;
+            margin-bottom: 18px; align-items: center;
         }
-
         .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(30,41,59,0.5);
-            padding: 6px 18px 6px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(8px);
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(30,41,59,0.5); padding: 6px 18px 6px 20px;
+            border-radius: 40px; backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .filter-group label {
-            font-weight: 500;
-            color: #cbd5e1;
-            font-size: 0.9rem;
-        }
-
+        .filter-group label { font-weight: 500; color: #cbd5e1; font-size: 0.9rem; }
         .filter-select {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-weight: 500;
-            color: #f1f5f9;
-            font-size: 0.9rem;
-            outline: none;
-            cursor: pointer;
+            background: #1e293b; border: 1px solid #334155;
+            padding: 8px 16px; border-radius: 40px; font-weight: 500;
+            color: #f1f5f9; font-size: 0.9rem; outline: none; cursor: pointer;
             transition: all 0.2s;
         }
-
         .filter-select:hover {
-            border-color: #22d3ee;
-            box-shadow: 0 0 10px rgba(34,211,238,0.3);
+            border-color: #22d3ee; box-shadow: 0 0 10px rgba(34,211,238,0.3);
         }
-
         .hint-text {
-            margin-left: auto;
-            font-size: 0.85rem;
-            color: #64748b;
-            background: rgba(30,41,59,0.5);
-            padding: 6px 18px;
-            border-radius: 40px;
+            margin-left: auto; font-size: 0.85rem; color: #64748b;
+            background: rgba(30,41,59,0.5); padding: 6px 18px; border-radius: 40px;
         }
-
-        /* 图表容器 */
-        .chart-container {
-            width: 100%;
-            min-height: 420px;
-        }
-
-        .sub-chart-container {
-            width: 100%;
-            height: 200px;
-            margin-top: 6px;
-        }
-
-        .ridge-container {
-            width: 100%;
-            height: 260px;
-        }
-
-        /* 统计面板 */
+        .chart-container { width: 100%; min-height: 420px; }
+        .sub-chart-container { width: 100%; height: 200px; margin-top: 6px; }
+        .ridge-container { width: 100%; height: 260px; }
         .stats-panel {
-            background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 16px 24px;
-            margin-top: 20px;
+            background: rgba(15,23,42,0.6); backdrop-filter: blur(12px);
+            border-radius: 24px; padding: 16px 24px; margin-top: 20px;
             border: 1px solid rgba(34,211,238,0.2);
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 30px;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 30px;
         }
-
-        .stat-block {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-
+        .stat-block { display: flex; align-items: baseline; gap: 10px; }
         .stat-label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            font-size: 0.85rem; font-weight: 500; color: #94a3b8;
+            text-transform: uppercase; letter-spacing: 0.3px;
         }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #f8fafc;
-            line-height: 1;
-        }
-
+        .stat-number { font-size: 2rem; font-weight: 700; color: #f8fafc; line-height: 1; }
         .stat-number.highlight {
             background: linear-gradient(135deg, #22d3ee, #818cf8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-
-        /* 异常探测器卡片 */
         .anomaly-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 6px;
-            max-height: 380px;
-            overflow-y: auto;
-            padding-right: 4px;
+            display: flex; flex-direction: column; gap: 14px; margin-top: 6px;
+            max-height: 380px; overflow-y: auto; padding-right: 4px;
         }
-
         .anomaly-item {
-            background: rgba(30,41,59,0.5);
-            backdrop-filter: blur(4px);
-            border-radius: 20px;
-            padding: 12px 18px;
+            background: rgba(30,41,59,0.5); backdrop-filter: blur(4px);
+            border-radius: 20px; padding: 12px 18px;
             border: 1px solid rgba(99,102,241,0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
-            animation: pulseGlow 2s infinite alternate;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.2s; animation: pulseGlow 2s infinite alternate;
         }
-
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 5px rgba(129,140,248,0.2); }
             100% { box-shadow: 0 0 12px rgba(129,140,248,0.5); }
         }
-
         .anomaly-item:hover {
-            border-color: #a78bfa;
-            background: rgba(49,46,129,0.3);
+            border-color: #a78bfa; background: rgba(49,46,129,0.3);
         }
-
-        .anomaly-info h4 {
-            font-weight: 600;
-            color: #e0e7ff;
-            margin-bottom: 4px;
-        }
-
-        .anomaly-info .reason {
-            font-size: 0.8rem;
-            color: #a5b4fc;
-        }
-
-        .anomaly-stats {
-            display: flex;
-            gap: 18px;
-        }
-
-        .anomaly-stats span {
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-
+        .anomaly-info h4 { font-weight: 600; color: #e0e7ff; margin-bottom: 4px; }
+        .anomaly-info .reason { font-size: 0.8rem; color: #a5b4fc; }
+        .anomaly-stats { display: flex; gap: 18px; }
+        .anomaly-stats span { font-size: 0.9rem; color: #cbd5e1; }
         .anomaly-badge {
-            background: #4338ca;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: white;
+            background: #4338ca; padding: 2px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 600; color: white;
         }
-
-        .empty-anomaly {
-            color: #64748b;
-            font-style: italic;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* 底部说明 */
+        .empty-anomaly { color: #64748b; font-style: italic; padding: 20px; text-align: center; }
         .insight-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-            margin-top: 28px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 28px;
         }
-
         .insight-card {
-            background: rgba(15,23,42,0.6);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 22px 26px;
+            background: rgba(15,23,42,0.6); backdrop-filter: blur(12px);
+            border-radius: 24px; padding: 22px 26px;
             border: 1px solid rgba(34,211,238,0.2);
         }
-
         .insight-card h3 {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 14px;
-            color: #e2e8f0;
+            font-size: 1.15rem; font-weight: 600; margin-bottom: 14px; color: #e2e8f0;
         }
-
         .insight-card p, .insight-card li {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            line-height: 1.6;
+            color: #94a3b8; font-size: 0.9rem; line-height: 1.6;
         }
-
         .footer-note {
-            text-align: center;
-            margin-top: 32px;
-            opacity: 0.7;
-            font-size: 0.85rem;
-            color: #64748b;
+            text-align: center; margin-top: 32px; opacity: 0.7;
+            font-size: 0.85rem; color: #64748b;
         }
         .footer-note a { color: #67e8f9; text-decoration: none; }
-
         @media (max-width: 1100px) {
             .main-grid, .bottom-grid { grid-template-columns: 1fr; }
         }
@@ -355,8 +167,8 @@
 <div class="dashboard">
     <div class="hero">
         <div>
-            <h1>🎮 定价心流 · 科技增强</h1>
-            <div class="subtitle">多维联动 + 时间演化 + 潜藏宝石探测</div>
+            <h1>🎮 定价策略</h1>
+            <div class="subtitle">真实 Steam 数据 · 多维联动 + 时间演化 + 潜藏宝石探测</div>
         </div>
         <div class="badge">⚡ 异常雷达 · 山脊时间线</div>
     </div>
@@ -376,11 +188,11 @@
                     <label>💰 价格</label>
                     <select id="priceRangeSelect" class="filter-select">
                         <option value="all" selected>全部付费</option>
-                        <option value="under10">¥10 以下</option>
-                        <option value="10-30">¥10 – ¥30</option>
-                        <option value="30-60">¥30 – ¥60</option>
-                        <option value="60-100">¥60 – ¥100</option>
-                        <option value="over100">¥100 以上</option>
+                        <option value="under10">$10 以下</option>
+                        <option value="10-30">$10 – $30</option>
+                        <option value="30-60">$30 – $60</option>
+                        <option value="60-100">$60 – $100</option>
+                        <option value="over100">$100 以上</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -424,7 +236,7 @@
                 <div class="empty-anomaly">🔍 等待数据…</div>
             </div>
             <div style="margin-top: 12px; font-size:0.75rem; color:#475569;">
-                ⚡ 规则：宝石(玩家<5w & 好评>92% & 价格<¥20) · 陷阱(价格>¥100 & 好评<65% & 玩家>10w)
+                ⚡ 规则：宝石(玩家<50k & 好评>92% & 价格<$20) · 陷阱(价格>$100 & 好评<65% & 玩家>100k)
             </div>
         </div>
     </div>
@@ -461,12 +273,12 @@
     <div class="insight-grid">
         <div class="insight-card">
             <h3>🧠 新维度洞察</h3>
-            <p>山脊图揭示价格分布随年份的漂移，异常探测器自动标出“沉默的优质游戏”。刷选散点图后，所有组件同步更新，仿佛新闻脉动中的多维侦探。</p>
+            <p>山脊图揭示价格分布随年份的漂移，异常探测器自动标出“沉默的优质游戏”。刷选散点图后，所有组件同步更新，基于真实 Steam 数据集。</p>
         </div>
         <div class="insight-card">
             <h3>📋 技术 & 数据</h3>
-            <p>Plotly.js 原生实现，无框架。模拟数据含类型、年份、折扣。设计语言致敬未来主义与扁平化。</p>
-            <p>数据源：基于Steam真实分布生成1,600+样本。</p>
+            <p>Plotly.js 原生实现，无框架。数据来自 Steam Dataset 2025 预处理结果。设计语言致敬未来主义与扁平化。</p>
+            <p>数据源：Zenodo Steam Dataset 2025，经本地聚合与清洗。</p>
         </div>
     </div>
     <div class="footer-note">
@@ -475,58 +287,13 @@
 </div>
 
 <script>
-    (function(){
-        // ---------- 增强数据 ----------
-        const GENRES = ['动作', '冒险', '策略', 'RPG', '模拟', '独立', '体育', '竞速', '大型多人在线', '休闲'];
-        const BASE_NAMES = [
-            "Counter-Strike 2", "Dota 2", "PUBG", "Apex", "GTA V", "Rust", "Elden Ring", 
-            "Baldur's Gate 3", "Hogwarts Legacy", "Palworld", "Helldivers 2", "Lethal Company", 
-            "Phasmophobia", "Valheim", "Stardew Valley", "Terraria", "Hades", "Dead Cells",
-            "Hollow Knight", "Celeste", "Undertale", "Witcher 3", "Cyberpunk 2077", 
-            "RDR2", "Sekiro", "Dark Souls III", "Monster Hunter", "Factorio", "RimWorld", "CK3"
-        ];
+    (function() {
+        // ---------- 全局数据容器 ----------
+        let fullData = [];
+        let currentFilteredData = [];
+        let selectedIndices = new Set();
 
-        const fullData = [];
-        for (let i = 0; i < 1600; i++) {
-            let price;
-            const r = Math.random();
-            if (r < 0.35) price = Math.round((Math.random() * 10 + 0.5) * 100) / 100;
-            else if (r < 0.7) price = Math.round((Math.random() * 20 + 10) * 100) / 100;
-            else if (r < 0.88) price = Math.round((Math.random() * 30 + 30) * 100) / 100;
-            else price = Math.round((Math.random() * 140 + 60) * 100) / 100;
-            
-            let baseRate = 72 + Math.random() * 24;
-            if (price > 70) baseRate = 65 + Math.random() * 28;
-            if (price < 12) baseRate = 62 + Math.random() * 32;
-            const positive_rate = Math.min(99.5, Math.max(35, baseRate));
-            
-            const total_reviews = Math.floor(Math.exp(Math.random()  * 7.5 + 5.2));
-            const estimated_players = total_reviews * (28 + Math.floor(Math.random() * 45));
-            
-            let price_bucket;
-            if (price < 10) price_bucket = '¥0-10';
-            else if (price < 30) price_bucket = '¥10-30';
-            else if (price < 60) price_bucket = '¥30-60';
-            else if (price < 100) price_bucket = '¥60-100';
-            else price_bucket = '¥100+';
-            
-            const genre = GENRES[Math.floor(Math.random() * GENRES.length)];
-            const release_year = 2014 + Math.floor(Math.random() * 11); 
-            const discount = Math.random() < 0.6 ? 0 : Math.floor(Math.random() * 75);
-            
-            const namePrefix = BASE_NAMES[i % BASE_NAMES.length];
-            const name = `${namePrefix} ${i+1}`;
-            
-            fullData.push({ name, price, positive_rate, total_reviews, estimated_players, price_bucket, genre, release_year, discount });
-        }
-        fullData.push(
-            { name: "Indie Gem", price: 9.99, positive_rate: 94.5, total_reviews: 12500, estimated_players: 450000, price_bucket: "¥0-10", genre: "独立", release_year: 2022, discount: 20 },
-            { name: "Mid-Tier Hit", price: 19.99, positive_rate: 88.2, total_reviews: 8700, estimated_players: 310000, price_bucket: "¥10-30", genre: "动作", release_year: 2020, discount: 0 },
-            { name: "AAA Blockbuster", price: 59.99, positive_rate: 82.1, total_reviews: 45000, estimated_players: 1800000, price_bucket: "¥60-100", genre: "RPG", release_year: 2023, discount: 30 },
-            { name: "Premium Niche", price: 129.99, positive_rate: 76.8, total_reviews: 1200, estimated_players: 42000, price_bucket: "¥100+", genre: "模拟", release_year: 2021, discount: 10 },
-            { name: "Surprise Hit", price: 14.99, positive_rate: 96.2, total_reviews: 32000, estimated_players: 1200000, price_bucket: "¥10-30", genre: "冒险", release_year: 2024, discount: 50 }
-        );
-
+        // 颜色映射
         const colorMap = {
             '¥0-10': '#22d3ee',
             '¥10-30': '#10b981',
@@ -535,6 +302,7 @@
             '¥100+': '#a78bfa'
         };
 
+        // DOM 元素
         const priceSelect = document.getElementById('priceRangeSelect');
         const reviewsSelect = document.getElementById('minReviewsSelect');
         const yearSelect = document.getElementById('yearRangeSelect');
@@ -545,9 +313,42 @@
         const genreDiv = document.getElementById('genreChart');
         const anomalyContainer = document.getElementById('anomalyContainer');
 
-        let currentFilteredData = [];
-        let selectedIndices = new Set();
+        // ---------- 数据加载 ----------
+        async function loadData() {
+            try {
+                const response = await fetch('steam_data.json');
+                const raw = await response.json();
+                fullData = raw.map(d => {
+                    // 价格从美分转换为美元
+                    const price = d.price / 100;
+                    let bucket;
+                    if (price < 10) bucket = '¥0-10';
+                    else if (price < 30) bucket = '¥10-30';
+                    else if (price < 60) bucket = '¥30-60';
+                    else if (price < 100) bucket = '¥60-100';
+                    else bucket = '¥100+';
+                    return {
+                        ...d,
+                        price,
+                        price_bucket: bucket,
+                        // 确保评价数与玩家数为整数
+                        total_reviews: Math.round(d.total_reviews),
+                        estimated_players: Math.round(d.estimated_players),
+                        // 保留好评率（浮点数）
+                        positive_rate: d.positive_rate,
+                        discount: d.discount || 0,
+                        genre: d.genre || '其他',
+                        release_year: d.release_year || 0
+                    };
+                });
+                refreshAll();
+            } catch (err) {
+                console.error('数据加载失败', err);
+                anomalyContainer.innerHTML = '<div class="empty-anomaly">❌ 数据加载失败</div>';
+            }
+        }
 
+        // ---------- 过滤函数 ----------
         function filterData() {
             const priceFilter = priceSelect.value;
             const minReviews = parseInt(reviewsSelect.value);
@@ -567,20 +368,20 @@
             });
         }
 
-        // 异常探测函数
+        // ---------- 异常探测 ----------
         function detectAnomalies(data) {
             const anomalies = [];
-            // 潜藏宝石：玩家<5w, 好评>92, 价格<20
+            // 潜藏宝石：玩家<50k, 好评>92, 价格<20
             const gems = data.filter(d => d.estimated_players < 50000 && d.positive_rate > 92 && d.price < 20)
-                             .sort((a,b) => b.positive_rate - a.positive_rate).slice(0, 3);
+                .sort((a, b) => b.positive_rate - a.positive_rate).slice(0, 3);
             gems.forEach(g => anomalies.push({ ...g, type: '💎 潜藏宝石', reason: '高口碑低曝光低价' }));
-            // 定价陷阱：价格>100, 好评<65, 玩家>10w
+            // 定价陷阱：价格>100, 好评<65, 玩家>100k
             const traps = data.filter(d => d.price > 100 && d.positive_rate < 65 && d.estimated_players > 100000)
-                             .sort((a,b) => a.positive_rate - b.positive_rate).slice(0, 2);
+                .sort((a, b) => a.positive_rate - b.positive_rate).slice(0, 2);
             traps.forEach(t => anomalies.push({ ...t, type: '⚠️ 定价陷阱', reason: '高价低口碑但玩家不少' }));
             // 沉默爆款：评价极少但玩家异常多
             const silent = data.filter(d => d.total_reviews < 50 && d.estimated_players > 50000)
-                               .sort((a,b) => b.estimated_players - a.estimated_players).slice(0, 1);
+                .sort((a, b) => b.estimated_players - a.estimated_players).slice(0, 1);
             silent.forEach(s => anomalies.push({ ...s, type: '🤫 沉默爆款', reason: '极少评价却玩家众多' }));
             return anomalies.slice(0, 6);
         }
@@ -597,7 +398,7 @@
                         <div class="reason">${a.reason}</div>
                     </div>
                     <div class="anomaly-stats">
-                        <span>💰 ¥${a.price.toFixed(2)}</span>
+                        <span>💰 $${a.price.toFixed(2)}</span>
                         <span>⭐ ${a.positive_rate.toFixed(1)}%</span>
                         <span>👥 ${a.estimated_players.toLocaleString()}</span>
                         <span class="anomaly-badge">${a.genre}</span>
@@ -606,7 +407,7 @@
             `).join('');
         }
 
-        // 更新山脊图 (小提琴按年份)
+        // ---------- 山脊图 (小提琴) ----------
         function updateRidgeChart(dataSubset) {
             const years = [...new Set(dataSubset.map(d => d.release_year))].sort();
             const violinTraces = years.map(year => {
@@ -634,7 +435,7 @@
                 plot_bgcolor: 'rgba(15,23,42,0.4)',
                 font: { color: '#cbd5e1', family: 'Inter', size: 11 },
                 xaxis: { title: '发行年份', gridcolor: '#334155', tickmode: 'linear' },
-                yaxis: { title: '价格 (¥)', gridcolor: '#334155', range: [0, 200] },
+                yaxis: { title: '价格 ($)', gridcolor: '#334155', range: [0, 200] },
                 showlegend: false,
                 violingap: 0.05,
                 violingroupgap: 0
@@ -642,6 +443,7 @@
             Plotly.react(ridgeDiv, violinTraces, layout, { responsive: true, displayModeBar: false });
         }
 
+        // ---------- 联动辅助图表 ----------
         function updateLinkedCharts(selectedDataSubset) {
             const dataForCharts = selectedDataSubset.length > 0 ? selectedDataSubset : currentFilteredData;
             // 直方图
@@ -689,6 +491,7 @@
             renderAnomalies(anomalies);
         }
 
+        // ---------- 统计面板 ----------
         function updateStatsPanel(dataSubset) {
             const count = dataSubset.length;
             if (count === 0) {
@@ -704,12 +507,13 @@
             const totalPlayers = dataSubset.reduce((s,d) => s + d.estimated_players, 0);
             const avgDiscount = dataSubset.reduce((s,d) => s + d.discount, 0) / count;
             document.getElementById('selectedCount').textContent = count.toLocaleString();
-            document.getElementById('avgPrice').textContent = `¥${avgPrice.toFixed(2)}`;
+            document.getElementById('avgPrice').textContent = `$${avgPrice.toFixed(2)}`;
             document.getElementById('avgPositive').textContent = `${avgRate.toFixed(1)}%`;
             document.getElementById('totalPlayers').textContent = totalPlayers.toLocaleString();
             document.getElementById('avgDiscount').textContent = `${avgDiscount.toFixed(0)}%`;
         }
 
+        // ---------- 主散点图 ----------
         function renderScatter() {
             currentFilteredData = filterData();
             const x = currentFilteredData.map(d => d.price);
@@ -717,7 +521,7 @@
             const sizes = currentFilteredData.map(d => Math.max(8, Math.min(50, 12 * Math.log10(d.estimated_players / 1000 + 2))));
             const colors = currentFilteredData.map(d => colorMap[d.price_bucket]);
             const texts = currentFilteredData.map(d => 
-                `<b>${d.name}</b><br>💰 ¥${d.price.toFixed(2)} | ⭐ ${d.positive_rate.toFixed(1)}%<br>👥 ${d.estimated_players.toLocaleString()} 玩家<br>📝 ${d.total_reviews} 评价<br>🎮 ${d.genre} | 📅 ${d.release_year} | 🔖折扣 ${d.discount}%`
+                `<b>${d.name}</b><br>💰 $${d.price.toFixed(2)} | ⭐ ${d.positive_rate.toFixed(1)}%<br>👥 ${d.estimated_players.toLocaleString()} 玩家<br>📝 ${d.total_reviews} 评价<br>🎮 ${d.genre} | 📅 ${d.release_year} | 🔖折扣 ${d.discount}%`
             );
             const trace = {
                 x, y, mode: 'markers', type: 'scatter',
@@ -734,7 +538,7 @@
                 { type: 'line', x0: 59.99, x1: 59.99, y0: 0, y1: 100, line: { color: '#475569', width: 1, dash: 'dash' } }
             ];
             const layout = {
-                xaxis: { title: '💰 价格 (¥)', range: [0, 200], gridcolor: '#334155', color: '#cbd5e1' },
+                xaxis: { title: '💰 价格 ($)', range: [0, 200], gridcolor: '#334155', color: '#cbd5e1' },
                 yaxis: { title: '⭐ 好评率 (%)', range: [0, 100], gridcolor: '#334155', color: '#cbd5e1' },
                 font: { color: '#cbd5e1', family: 'Inter', size: 12 },
                 hovermode: 'closest', dragmode: 'select', shapes,
@@ -764,6 +568,8 @@
         }
 
         function refreshAll() { renderScatter(); }
+
+        // 事件监听
         priceSelect.addEventListener('change', refreshAll);
         reviewsSelect.addEventListener('change', refreshAll);
         yearSelect.addEventListener('change', refreshAll);
@@ -774,7 +580,9 @@
             Plotly.Plots.resize(boxDiv);
             Plotly.Plots.resize(genreDiv);
         });
-        refreshAll();
+
+        // 启动：加载真实数据
+        loadData();
     })();
 </script>
 </body>
